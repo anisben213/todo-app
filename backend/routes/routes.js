@@ -43,29 +43,26 @@ router.put("/todos/:id", async (req, res) => {
     const update = req.body;
     console.log(update);
 
-    // Vérifie si `status` est présent et est un booléen
+    //   CHECK IF STATUS IS BOOLEAN
     if ('status' in update && typeof update.status !== "boolean") {
       return res.status(400).json({ message: "Status must be a boolean." });
     }
 
-    // Étape 1: Récupérer le document actuel pour connaître la valeur de `status`
     const todo = await Todo.findById(id);
-    console.log("this is is todo" + todo);
     if (!todo) {
       return res.status(404).json({ message: "Todo not found." });
     }
 
-    // Étape 2: Inverser la valeur de `status` et mettre à jour le document
+    
     const updatedTodo = await Todo.findByIdAndUpdate(
       id,
       { $set: { status: !update.status } }, // Inverse la valeur de `status`
       { new: true }
     );
     if (updatedTodo) {
-      // Si `findByIdAndUpdate` a retourné un document, l'opération est "acknowledged"
+
       return res.json({ acknowledged: true, todo: updatedTodo });
     } else {
-      // Si aucun document n'est retourné, l'ID n'était probablement pas valide
       return res.status(404).json({ acknowledged: false, message: "Todo not found." });
     }
   } catch (error) {

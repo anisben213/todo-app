@@ -1,11 +1,6 @@
 export default function Todo({ todo, setTodos }) {
   const updateTodo = async (todoId, todoStatus) => {
-    console.log(
-      "Mise à jour du todo avec ID:",
-      todoId,
-      "Nouveau statut:",
-      todoStatus
-    );
+
     const res = await fetch(`/todos/${todoId}`, {
       method: "PUT",
       body: JSON.stringify({ status: todoStatus }),
@@ -13,7 +8,6 @@ export default function Todo({ todo, setTodos }) {
         "Content-Type": "application/json",
       },
     });
-    console.log("Réponse reçue:", res);
 
     const json = await res.json();
     if (json.acknowledged) {
@@ -23,7 +17,6 @@ export default function Todo({ todo, setTodos }) {
           if (currentTodo._id === todoId) {
             return { ...currentTodo, status: !currentTodo.status };
           }
-          console.log("l'etat apres mis a jour:", currentTodos);
           return currentTodo;
         });
       });
@@ -37,7 +30,7 @@ export default function Todo({ todo, setTodos }) {
       method: "DELETE",
     });
     if (!res.ok) {
-      const text = await res.text(); // Récupère la réponse en tant que texte
+      const text = await res.text(); 
       console.error("Erreur de requête:", text);
       return;
   }
